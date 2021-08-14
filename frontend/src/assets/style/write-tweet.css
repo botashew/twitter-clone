@@ -1,0 +1,116 @@
+.write-tweet {
+    margin-top: 7px;
+    margin-bottom: 3px;
+    background: white;
+    max-width: 598px;
+    display: flex;
+    padding: 0 16px;
+}
+
+.write-tweet__image{
+    margin-right: 12px;
+}
+
+
+.write-tweet__content-input{
+    color: #5D6D79;
+    font-size: 20px;
+    border: none;
+    background: none;
+    outline: none;
+    line-height: 40px;
+    width: 280px;
+}
+
+.write-tweet__write{
+    margin: 12px 0;
+    font-size: 20px;
+    color: #5D6D79;
+}
+
+.write-tweet__who-can-reply{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4AA1F2;
+    font-size: 15px;
+    height: 32px;
+    width: 173px;
+    padding: 0 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.write-tweet__who-can-reply:hover{
+    background: rgba(29,161,242,0.1);
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.write-tweet__who-can-reply-icon{
+    width: 15px;
+    height: 15px;
+    filter: invert(54%) sepia(50%) saturate(2003%) hue-rotate(186deg) brightness(102%) contrast(90%);
+    margin-right: 5px;
+}
+
+.write-tweet__footer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #e6ecf0;
+    width: 500px;
+    padding-top: 5px;
+}
+
+.write-tweet__footer-icons{
+    display: flex;
+    align-items: center;
+}
+
+.write-tweet__footer-icon{
+    width: 21px;
+    height: 21px;
+    filter: invert(54%) sepia(50%) saturate(2003%) hue-rotate(186deg) brightness(102%) contrast(90%);
+    margin: 15px;
+}
+
+.write-tweet__footer-icon-div:hover{
+    background: rgba(29,161,242,0.1);
+    color: #4AA1F2;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.write-tweet__button{
+    background: #4AA1F2;
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 40px;
+    padding: 5px;
+    width: 75px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.write-tweet__button:hover{
+    background: #4495E0;
+}
+
+.befor-write-tweet{
+    background: #EFF3F4;
+    width: 598px;
+    height: 54px;
+}
+
+.after-write-tweet{
+    width: 598px;
+    height: 10px;
+    background: #F7F9F9;
+    border-top: 1px solid #e6ecf0;
+    border-bottom: 1px solid #e6ecf0;
+}

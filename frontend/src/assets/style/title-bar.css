@@ -1,0 +1,23 @@
+.title-bar{
+    width: 598px;
+    height: 53px;
+    border-bottom: 1px solid #e6ecf0;
+    position: fixed;
+    display: inline-flex;
+    background: white;
+    /* margin-bottom: 53px; */
+    /* align-items: center; */
+}
+
+.title-content{
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 0 16px;
+}
+
+.title-name{
+    font-size: 20px;
+    font-weight: bold;
+    color: #0F1419;
+}

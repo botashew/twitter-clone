@@ -1,0 +1,12 @@
+if typeof errors != 'undefined'
+        each error in errors
+            div #{error.msg}
+
+if success_msg != ''
+    div #{success_msg}
+
+if error_msg != ''
+    div #{error_msg}
+
+if error != ''
+    div #{error}
