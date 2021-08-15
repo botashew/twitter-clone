@@ -1,3 +1,3 @@
 # Twitter-Clone
 
-Twitter-clone wit JavaScrip: NodeJS, Vue.js
+Twitter-clone with JavaScrip: NodeJS, Vue.js and MongoDB
