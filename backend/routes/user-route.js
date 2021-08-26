@@ -5,8 +5,6 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false})
 const UserService = require('../services/user-service')
 const TweetService = require('../services/tweet-service')
 const bcrypt = require('bcrypt')
-const passport = require('passport')
-const { ensureAuthenticated } = require('../config/auth')
 
 
 // Get all data from DB
