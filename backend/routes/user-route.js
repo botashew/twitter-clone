@@ -47,31 +47,14 @@ router.get('/signup', (req,res) => {
 
 
 // Log In Method
-router.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/user/dashboard',
-        failureRedirect: '/user/login',
-        failureFlash: true 
-    })(req, res, next)
-})
 
 
 
 // Dashboard (Home page in Twitter)
-router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.render('dashboard', {
-        user: req.user
-    })
-})
 
 
 
 
 // Log out Method
-router.get('/logout', (req, res) => {
-    req.logout()
-    req.flash('success_msg', 'You are logged out')
-    res.redirect('/user/login')
-})
 
 module.exports = router
