@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Friends from '../views/Friends.vue'
 import Twitter from '../views/Twitter.vue'
 import Signup from '../views/signup.vue'
-import Login from '../views/login.vue'
+import VueCookie from 'vue-cookie'
+
 
 Vue.use(VueRouter)
 
@@ -17,20 +16,10 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
-  {
-    path: '/friends',
-    name: 'Friends',
-    component: Friends
+    component: () => import('../views/Home.vue'),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/signup',
@@ -38,9 +27,9 @@ const routes = [
     component: Signup
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
+    path: "/login",
+    name: "login",
+    component: () => import('../views/login.vue')
   }
  
 ]
@@ -51,8 +40,12 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  console.log(to.name)
+router.beforeEach(async (to, from, next) => {
+  const token = await VueCookie.get('token')
+  if(to.meta.requiresAuth && !token){
+    router.push({path: '/'})
+  }
+
   document.title = to.name + " / Twitter"
   next()
 })

@@ -1,13 +1,34 @@
 const express = require('express')
 const router = express.Router()
-const bodyParser = require('body-parser')
-const urlencodedParser = bodyParser.urlencoded({ extended: false})
 const UserService = require('../services/user-service')
-const TweetService = require('../services/tweet-service')
-const bcrypt = require('bcrypt')
-const passport = require('passport')
-const { ensureAuthenticated } = require('../config/auth')
+const userModel = require('../models/users-model.js')
+const jwt = require('jsonwebtoken')
 
+
+const getErrors = (err) => {
+    let errors = {name: '', email: '', password: ''}
+
+    if(err.message === 'Incorrect email'){
+        errors.email = 'That email is not registered'
+    }
+    if(err.message === 'Incorrect password'){
+        errors.password = 'That password is incorrect'
+    }
+
+    if(err.message.includes('User validation failed')){
+        Object.values(err.errors).forEach(({properties}) => {
+            errors[properties.path] = properties.message
+        }) 
+    }
+
+    return errors
+}
+
+// Create token
+const maxAge = 24 * 60 * 60
+const createToken = (id) => {
+    return jwt.sign({ id }, 'botashew secret', { expiresIn: maxAge})
+}
 
 // Get all data from DB
 router.get('/all', async (req, res) => {
@@ -15,13 +36,6 @@ router.get('/all', async (req, res) => {
     res.render('list', {users: users})
 })
 
-// Write Tweets
-router.post('/:id/write-tweet', urlencodedParser, async (req, res) => {
-    const user = await UserService.findById(req.params.id)
-    const tweet = await TweetService.add(req.body)
-    await TweetService.toTweet(user, tweet)
-    res.send(tweet)
-})
 
 
 // Get All data as JSON
@@ -30,115 +44,42 @@ router.get('/all/json', async (req, res) => {
     res.send(users)
 })
 
-// Login Form
-router.get('/login', (req, res) =>{
-     res.render('login')
-})
-
-
-// Sign Up form
-router.get('/signup', (req,res) => {
-    res.render('signup')
-})
-
-
 // Sign Up Method
-router.post('/signup', (req, res) => {
-    const { name, email, password, password2 } = req.body
-    let errors = []
-
-    // Check required fields
-    if(!name || !email || !password || !password2){
-        errors.push({ msg: 'Please fill in all fields'})
-    }
-
-    if(password !== password2){
-        errors.push({ msg: 'Passwords don\'t match'})
-    }
-
-    if(errors.length > 0){
-        res.send({
-            errors,
-            name,
-            email,
-            password,
-            password2
-        })
-    }
-    else{
-
-        // Validation passed
-        UserService.findOne({ email: email})
-        .then(user => {
-            if(user){
-                errors.push({ msg: 'Email is already registered' })
-                res.send({
-                    errors,
-                    name,
-                    email,
-                    password,
-                    password2
-                })
-            }else{
-                const newUser = new UserService.model({
-                    name,
-                    email,
-                    password
-                })
-                
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if(err) throw err
-
-                        // Hash password
-                        newUser.password = hash
-
-                        // Save user
-                        newUser
-                            .save()
-                            .then(user => {
-                                req.flash(
-                                    'success_msg',
-                                    'You are now registered and you can log in'
-                                )
-                                res.redirect('/user/login')
-                            })
-                            .catch(err => console.log(err))
-                    })
-                })
-            }
-        })
+router.post('/signup', async (req, res) => {
+    const { name, email, password } = req.body
+    try{
+        const user = await UserService.add({name, email, password})
+        res.status(201).json({ user: user._id })
+    }catch(err){
+        const errors = getErrors(err)
+        res.status(400).json({errors})
     }
 })
-
-
 
 // Log In Method
-router.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/user/dashboard',
-        failureRedirect: '/user/login',
-        failureFlash: true 
-    })(req, res, next)
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body
+    
+    try{
+        const user = await userModel.login(email, password)
+        const token = createToken(user)
+        res.cookie('token', token, { httpOnly: true, maxAge: maxAge * 1000 })
+        res.status(200).json({ 
+            user: user,
+            token: token 
+        })
+    }catch(err){
+        const errors = getErrors(err)
+        res.status(400).json(errors)
+    }
 })
-
 
 
 // Dashboard (Home page in Twitter)
-router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.render('dashboard', {
-        user: req.user
-    })
-})
 
 
 
 
 // Log out Method
-router.get('/logout', (req, res) => {
-    req.logout()
-    req.flash('success_msg', 'You are logged out')
-    res.redirect('/user/login')
-})
 
 module.exports = router
