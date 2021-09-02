@@ -32,7 +32,7 @@
                 img(src="../assets/profile-image-1.jpg" class="tweet__author-logo")
             div.write-tweet__content
                 //- Form
-                form(@submit.prevent="postTweet" method="POST")
+                form(@submit.prevent="postTweet")
                     div.write-tweet__write
                         input(type="text" class="write-tweet__content-input" placeholder="What's happening?" name="tweet" v-model="post.tweet")
                     div.write-tweet__who-can-reply
@@ -57,7 +57,7 @@
         
 
         //- Tweets
-        Tweets(v-for="tweet in tweets", :tweet="tweet" :key="tweet.id")
+        Tweets(v-for="(tweet, i) in tweets", :tweet="tweet" :key="i")
 
 </template>
 

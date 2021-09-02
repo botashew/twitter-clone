@@ -10,13 +10,23 @@
                     h2 Join Twitter today.
                     router-link(to="signup")
                         div.twitter__signup-button Sign Up
-                    div.twitter__login-button Log in
+                    router-link(to="login")
+                        div.twitter__login-button Log in
         //- Footer
         div.twitter__footer
             div
                 span Twitter-Clone by @botashew
 </template>
 
+<script>
+export default {
+    data() {
+        return {
+            
+        }
+    },
+}
+</script>
 <style scoped>
     @import '../assets/style/twitter.css';
 </style>

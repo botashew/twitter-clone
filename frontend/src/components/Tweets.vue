@@ -12,7 +12,7 @@
             div.tweet__main
                 div.tweet__header
                     div.tweet__author-name
-                        span {{ tweet.byUser[0].name}}
+                        span {{ tweet.byUser[0].name }}
                     div.tweet__author-slug
                         span @botashevakbar
                     div.tweet__publish-time

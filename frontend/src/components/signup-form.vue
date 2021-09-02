@@ -2,15 +2,17 @@
     div.main
         img(src="../assets/svg/twitter.svg")
         h1 Create your account
-        if typeof errors != 'undefined'
-            each error in errors
-                div #{error.msg}
         div.form
-            form(@submit.prevent="signUp" method="POST")
-                input(type="text" name="name" placeholder="Name" v-model="user.name")
-                input(type="text" name="email" placeholder="Email" v-model="user.email")
-                input(type="password" name="password" placeholder="Create Password" v-model="user.password")
-                input(type="password" name="password2" placeholder="Confirm Password" v-model="user.password2")
+            form(@submit.prevent="signUp")
+                div.input
+                    input(type="text" name="name" placeholder="Name" v-model="user.name")
+                    div(v-show="!user.name" class="error_msg") {{errors.name}}
+                div.input
+                    input(type="text" name="email" placeholder="Email" v-model="user.email")
+                    div(v-show="!user.email" class="error_msg") {{errors.email}}
+                div.input
+                    input(type="password" name="password" placeholder="Create Password" v-model="user.password")
+                    div(v-show="!user.password" class="error_msg") {{errors.password}}
                 div
                     p Date of birth
                     span.
@@ -31,7 +33,7 @@ export default {
         ...mapState(['user','errors'])
     },
     methods: {
-        ...mapActions(['signUp']),
+        ...mapActions(['signUp', 'clearErrors']),
         // change_year: function(select){
         //     function isLeapYear(year){
         //         year = parseInt(year)
@@ -122,7 +124,7 @@ export default {
 }
 
 // Date of Birth
-var Days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]//index - month [0-11]
+// var Days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]//index - month [0-11]
 // $(document).ready(function(){
     
 // })
@@ -141,6 +143,9 @@ var Days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]//index - month [0-11
     padding: 20px;
 }
 
+.input{
+    margin: 20px 0;
+}
 h1{
     font-size: 23px;
 }
@@ -160,10 +165,10 @@ input{
     width: 543px;
     height: 40px;
     padding: 10px;
-    /* margin: 10px; */
     border: 1px solid #CFD9DE;
     border-radius: 5px;
     font-size: 17px;
+    
 }
 
 input:focus{
@@ -198,5 +203,8 @@ span {
 
 .signup-button:hover{
     background: #4495E0;
+}
+.error_msg{
+    color: red;
 }
 </style>

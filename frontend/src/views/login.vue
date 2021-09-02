@@ -3,9 +3,13 @@
         img(src="../assets/svg/twitter.svg")
         h2 Log in to Twitter
         form(@submit.prevent="logIn")
-        input(type="text" placeholder="Email")
-        input(type="password" placeholder="Password")
-        input(type="submit" value="Log in" class="login-button")
+            div.success_msg
+                h3 {{successMsg}}
+            input(type="text" placeholder="Email" v-model="user.email")
+            div.error_msg {{errors.email}}
+            input(type="password" placeholder="Password" v-model="user.password")
+            div.error_msg {{errors.password}}
+            input(type="submit" value="Log in" class="login-button")
         router-link(to="signup") Sign up for Twitter
 </template>
 
@@ -13,7 +17,7 @@
 import { mapState, mapActions } from 'vuex'
     export default {
         computed: {
-
+            ...mapState(['user', 'errors', 'successMsg'])
         },
         methods: {
             ...mapActions(['logIn'])
@@ -23,6 +27,15 @@ import { mapState, mapActions } from 'vuex'
 
 
 <style scoped>
+    img{
+        height: 28px;
+    }
+    .success_msg {
+        color: green;
+    }
+    .error_msg{
+        color: red;
+    }
     .main{
         border: none;
         margin: 0 auto;

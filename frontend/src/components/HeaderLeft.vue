@@ -23,5 +23,24 @@
                     div.sidebar-menu__item
                         img(src="../assets/svg/more.svg", class="sidebar-menu__item-icon")
                         span More
+                    div
+                        p {{currentUser.name}}
+                        p {{currentUser.email}}
+                    div
+                        button(@click="logout") Logout
 </template>
 
+<script>
+import { mapActions } from 'vuex'
+import VueCookie from 'vue-cookie'
+    export default {
+        computed: {
+            currentUser(){
+                return JSON.parse(VueCookie.get('user'))
+            }
+        },
+        methods: {
+            ...mapActions(['logout'])
+        }
+    }
+</script>
