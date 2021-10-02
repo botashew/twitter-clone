@@ -5,7 +5,7 @@ async function main(){
         useUnifiedTopology: true,
         useNewUrlParser: true
     })
-    console.log('connect')
+    console.log('Connecting to mongoDB...')
 }
 
 main()

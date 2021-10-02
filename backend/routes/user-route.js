@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 
 
 const getErrors = (err) => {
-    let errors = {name: '', email: '', password: ''}
+    let errors = {name: '', username: '', email: '', password: ''}
 
     if(err.message === 'Incorrect email'){
         errors.email = 'That email is not registered'
@@ -30,25 +30,11 @@ const createToken = (id) => {
     return jwt.sign({ id }, 'botashew secret', { expiresIn: maxAge})
 }
 
-// Get all data from DB
-router.get('/all', async (req, res) => {
-    const users = await UserService.findAll()
-    res.render('list', {users: users})
-})
-
-
-
-// Get All data as JSON
-router.get('/all/json', async (req, res) => {
-    const users = await UserService.findAll()
-    res.send(users)
-})
-
 // Sign Up Method
 router.post('/signup', async (req, res) => {
-    const { name, email, password } = req.body
+    const { name, username, email, password } = req.body
     try{
-        const user = await UserService.add({name, email, password})
+        const user = await UserService.add({name, username, email, password})
         res.status(201).json({ user: user._id })
     }catch(err){
         const errors = getErrors(err)
@@ -73,13 +59,5 @@ router.post('/login', async (req, res) => {
         res.status(400).json(errors)
     }
 })
-
-
-// Dashboard (Home page in Twitter)
-
-
-
-
-// Log out Method
 
 module.exports = router

@@ -13,7 +13,7 @@
         methods: {
             ...mapActions(['fetchTweets', 'postTweet']),
         },
-        created(){
+        async created(){
             this.fetchTweets()
         }
     }

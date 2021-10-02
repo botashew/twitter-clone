@@ -11,6 +11,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
     "vue": "^2.6.11",

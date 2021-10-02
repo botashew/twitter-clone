@@ -1,17 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const TweetService = require('../services/tweet-service')
-const bodyParser = require('body-parser')
-const urlencodedParser = bodyParser.urlencoded({ extended: false})
 const UserService = require('../services/user-service')
 
-router.get('/all/json', async (req, res) => {
-    const tweets = await TweetService.findAll()
-    res.send(tweets)
-})
-
-// Write Tweets
-router.post('/:id/write-tweet', urlencodedParser, async (req, res) => {
+// Add Tweet
+router.post('/write/:id', async (req, res) => {
     try{
         const user = await UserService.findById(req.params.id)
         const tweet = await TweetService.add(req.body)
@@ -24,5 +17,16 @@ router.post('/:id/write-tweet', urlencodedParser, async (req, res) => {
     
 })
 
+// Get All Tweets
+router.get('/all', async (req, res) => {
+    const tweets = await TweetService.findAll()
+    res.send(tweets)
+})
+
+// Get One Tweet
+router.get('/:id', async (req, res) => {
+    const tweet = await TweetService.findById(req.params.id)
+    res.send(tweet)
+})
 
 module.exports = router

@@ -11,7 +11,10 @@ const routes = [
   {
     path: '/',
     name: 'Twitter. It\'s what\'s happening',
-    component: Twitter
+    component: Twitter,
+    meta: {
+      isLoggedIn: true
+    }
   },
   {
     path: '/home',
@@ -28,7 +31,7 @@ const routes = [
   },
   {
     path: "/login",
-    name: "login",
+    name: "Login",
     component: () => import('../views/login.vue')
   }
  
@@ -42,8 +45,13 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   const token = await VueCookie.get('token')
+
   if(to.meta.requiresAuth && !token){
     router.push({path: '/'})
+  }
+
+  if(to.meta.isLoggedIn && token){
+    router.push({path: '/home'})
   }
 
   document.title = to.name + " / Twitter"

@@ -14,10 +14,10 @@ const TweetSchema = new mongoose.Schema({
         required: true,
         minLength: 1
     },
-    // date: {
-    //     type: Date,
-    //     default: Date.now
-    // }
+    date: {
+        type: Date,
+        default: Date.now
+    }
 })
 
 TweetSchema.plugin(require('mongoose-autopopulate'))

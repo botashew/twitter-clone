@@ -1,7 +1,32 @@
 <script>
+import moment from 'moment'
     export default {
         name: 'Tweets',
         props: ['tweet'],
+        created(){
+
+            const date1 = moment(new Date(this.tweet.date).toUTCString())
+            const date2 = moment(new Date(Date.now()).toUTCString())
+
+            const diffSecond = date2.diff(date1, 'second')
+            const diffMinute = date2.diff(date1, 'minute')
+            const diffHour = date2.diff(date1, 'hour')
+            const diffDay = date2.diff(date1, 'day')
+
+            if(diffDay >= 1){
+                this.tweet.date = diffDay + 'd'
+            }
+            else if(diffHour >= 1){
+                this.tweet.date = diffHour + 'h'
+            }
+            else if(diffMinute >= 1){
+                this.tweet.date = diffMinute + 'm'
+            }
+            else{
+                this.tweet.date = diffSecond + 's'
+            }
+            
+        }
     }
 </script>
 
@@ -14,13 +39,11 @@
                     div.tweet__author-name
                         span {{ tweet.byUser[0].name }}
                     div.tweet__author-slug
-                        span @botashevakbar
+                        span @{{ tweet.byUser[0].username }}
                     div.tweet__publish-time
-                        span 38m
+                            span · {{ tweet.date }}
                 div.tweet__content
-                    span  {{ tweet.tweet }} 
-                    a(href="#") Kremlin.ru
-                    //- img(src="../assets/image/image-for-tweet.jpg" class="tweet__image")
+                    span  {{ tweet.tweet }}
 
 </template>
 

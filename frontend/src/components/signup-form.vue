@@ -8,6 +8,9 @@
                     input(type="text" name="name" placeholder="Name" v-model="user.name")
                     div(v-show="!user.name" class="error_msg") {{errors.name}}
                 div.input
+                    input(type="text" name="username" placeholder="Username" v-model="user.username")
+                    div(v-show="!user.username" class="error_msg") {{errors.username}}
+                div.input
                     input(type="text" name="email" placeholder="Email" v-model="user.email")
                     div(v-show="!user.email" class="error_msg") {{errors.email}}
                 div.input

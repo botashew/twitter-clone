@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import auth from './modules/auth'
 import VueCookie from 'vue-cookie'
+import Router from '../router/index'
 
 Vue.use(Vuex)
 
@@ -14,11 +15,13 @@ export default new Vuex.Store({
     },
     user:{
       name: null,
+      username: null,
       email: null,
       password: null
     },
     errors: {
       name: '',
+      username: '',
       email: '',
       password: ''
     },
@@ -40,77 +43,61 @@ export default new Vuex.Store({
     }
   },
   actions: {
-
-    // Create token
-    
-    // createToken (id) {
-    //     const maxAge = 24 * 60 * 60
-    //     return jwt.sign({ id }, 'botashew secret', { expiresIn: maxAge})
-    // },
-    // Sign Up
-    // signUp({commit}) {
-    //   axios.post('http://localhost:3000/user/signup', this.state.user)
-    //     .then(response => {
-    //       // Error
-    //       if(response.data.errors){
-    //         commit('SET_ERRORS', response.data.errors)
-    //         console.log(response.data.errors)
-    //       }
-          
-    //     })
-    // },
-
+    // Create account
     signUp({commit}) {
       axios.post('http://localhost:3000/user/signup', this.state.user)
         .then(() => {
           commit('SET_SUCCESS_MSG', 'You registered successfuly, you can login now')
-          window.$vm.$router.push({name: 'login'})
+          Router.push({name: 'Login'})
         })
         .catch(err => {
-          commit('SET_ERRORS', err.response.data)
+          console.log(err.response.data.errors)
+          commit('SET_ERRORS', err.response.data.errors)
         })
     },
 
     // Login
     logIn({ commit }){
-      axios.post('http://localhost:3000/user/login', {
-        email: this.state.user.email,
-        password: this.state.user.password
+
+  
+        axios.post('http://localhost:3000/user/login', {
+          email: this.state.user.email,
+          password: this.state.user.password
         })
-      .then( (response) => {
-        VueCookie.set('token', response.data.token, 1)
-        VueCookie.set('user', JSON.stringify(response.data.user))
-        window.$vm.$router.push({name: 'Home'})
-      })
-      .catch(err => {
-        commit('SET_ERRORS', err.response.data)
-      })
-      
+        .then( response => {
+          VueCookie.set('token', response.data.token, 1)
+          VueCookie.set('user', JSON.stringify(response.data.user))
+          Router.push({name: 'Home'})
+        })
+        .catch(err => {
+          if(err.response){
+            commit('SET_ERRORS', err.response.data)
+          }
+        })
     },
 
     // Logout
     logout(){
       VueCookie.delete('token')
       VueCookie.delete('user')
-      window.$vm.$router.go()
+      Router.go()
     },
-    // Create Tweet
+
+    // Add Tweet
     async postTweet({commit}){
         const user = JSON.parse(VueCookie.get('user'))
-        const result = await axios.post('http://localhost:3000/tweets/'+user._id+'/write-tweet', {
+        const result = await axios.post('http://localhost:3000/tweet/write/'+user._id, {
             tweet: this.state.post.tweet })
         commit('PUSH_TWEET', result.data)
         this.state.post.tweet = null
       },
-
     
     // Get all Tweets
     async fetchTweets({ commit }){
-      const result = await axios.get('http://localhost:3000/tweets/all/json')
-      commit('SET_TWEETS', result.data)
+      const result = await axios.get('http://localhost:3000/tweet/all')
+      const tweets = result.data
+      commit('SET_TWEETS', tweets)
     },
-
-    // Delete Tweet
 
   },
   modules: {
