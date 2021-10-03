@@ -1,12 +1,10 @@
 Get Requests:
 /
-/home
-/tweets/all/json
-/user/all
-/user/all/json
+/tweet/all
+/tweet/:id
+/user/:id
 /user/login
-/user/signup
 
 Post Requests:
-/tweets/:id/write-tweet
-/
+/tweet/write/:id
+/user/signup
